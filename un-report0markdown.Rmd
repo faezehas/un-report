@@ -1,0 +1,66 @@
+---
+title: "A UN report on the relationships between GDP and Life exp"
+author: "Faezeh"
+date: "2023-05-25"
+output: html_document
+---
+
+
+<!-- In the context of R Markdown and knitr (an R package), a "chunk" refers to a specific section of code within an R Markdown document that can be executed and rendered. Chunks are denoted by a specific syntax and are used to include and evaluate R code within the document. -->
+
+```{r setup, include=FALSE}
+#with add  include=FALSE. code and output will not show in the results 
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages , include=FALSE} 
+#with add  echo=FALSE. only the code will not show in the results 
+library(tidyverse)
+
+```
+
+
+This report was prepared to the attnetionof the United Nations. It analyzes the relation between a country's GDP, its life expectancy and CO2 emissions. Our goal is to determine to what gedree a country's econoic strenght or weakness may be related to its ublic health status and impact on climate population. We hypothesize that both life aexpectancy and CO2 emissions increase with a country's GDP.
+
+```{r load_date, include =FALSE}
+gapminder_1997 <- read_csv ("Data/gapminder_1997.csv")
+```
+
+```{r gdp_lifeexp_1997, echo=FALSE } 
+ggplot (data =gapminder_1997) +
+  aes ( x= gdpPercap, y= lifeExp,color=continent, size=pop/1000000)+
+  geom_point()+
+  labs(x= "GDP per capital", y= "Life of expectancy",
+       title="Do peaple in wealthy countries life longer?",
+       size="population [in million]")
+```
+
+```{r , include=FALSE}
+nCountries <- gapminder_1997 %>% select(country) %>% n_distinct()
+#this line count number of the country
+#minGDP <- gapminder_1997 %>%  summarise(min(gdpPercap)) %>% pull() %>% round(,5)
+#maxGDP <- gapminder_1997 %>%  summarise(max(gdpPercap)) %>% pull() %>% round(,5)
+
+minGDP <- gapminder_1997 %>%  summarise(round(min(gdpPercap))) %>% pull()
+maxGDP <- gapminder_1997 %>%  summarise(round(max(gdpPercap))) %>% pull() 
+```
+
+The above plot shows the relationship between GDP per capital and life expectancy fot a total of `r nCountries` countries. For this set of countries, econimic ealth ranged from a minimum of USD `r minGDP` to a maximum of USD `r maxGDP` per capita.
+
+<!-- define table -->
+<!-- Way1 -->
+|HEDEAR 1| HEADER 2|
+|--------|--------|
+|row 1, column 1|row 1, column 2|
+|row 2, column 1|row 2, column 2|
+
+<!-- Way2 -->
+```{r kable_table , echo=FALSE}
+library(knitr)
+gapminder_1997 %>% 
+  filter(continent == "Oceania") %>% 
+  kable()
+
+
+```
+
